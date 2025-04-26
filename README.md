@@ -1,2 +1,2 @@
 # firefox-inertia-devtools
-A simple FireFox extension to inspect Inertia.js data
+🕵️‍♂️ A simple FireFox extension to inspect Inertia.js data
