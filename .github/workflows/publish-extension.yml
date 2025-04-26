@@ -1,0 +1,33 @@
+name: publish_firefox_extension
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  build-and-sign:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install web-ext
+      run: npm install --global web-ext
+
+    - name: Build extension
+      run: web-ext build --artifacts-dir ./web-ext-artifacts
+
+    - name: Sign extension
+      run: |
+        web-ext sign \
+          --api-key="${{ secrets.AMO_API_KEY }}" \
+          --api-secret="${{ secrets.AMO_API_SECRET }}" \
+          --artifacts-dir ./web-ext-artifacts \
+          --source-dir .
+          
+    - name: Upload signed extension artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: signed-extension
+        path: web-ext-artifacts/*.xpi
