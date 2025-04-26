@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <style>
+            body {
+                padding: 0.5rem;
+            }
+            form { 
+                display: flex;
+                flex-direction: column;
+                justify-items: start;
+                gap: 1rem;
+            }
+            .group {
+                display: flex;
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+            .group > span {
+                font-weight: 500;
+                font-size: 1.1rem;
+            }
+            input {
+                border-radius: 5px;
+                box-shadow: none;
+                border: #444 solid 1px;
+                padding: 0.5rem 0.75rem;
+            }
+            input[type=color] {
+                padding: none;
+                border-radius: 5px;
+            }
+            input:hover {
+                transition: all;
+                transition-duration: 100ms;
+                border: 1px solid #333;
+            }
+            button {
+                border: none;
+                width: max-content;
+                color: ghostwhite;
+                border-radius: 5px;
+                padding: 0.5rem 2rem;
+                font-size: 1.1rem;
+                font-weight: 600;
+                background-color: #444;
+                transition: all;
+                transition-duration: 100ms;
+            }
+            button:hover {
+                background-color: #333;
+                cursor: pointer;
+            }
+        </style>
+    </head>
+
+    <body>
+        <form>
+            <div class="group">
+                <span>
+                    Background color:
+                </span>
+                <input
+                    type="color"
+                    id="backgroundColor"
+                >
+            </div>
+            <div class="group">
+                <span>
+                    Key color:
+                </span>
+                <input
+                    type="color"
+                    id="keyColor"
+                >
+            </div>
+            <div class="group">
+                <span>
+                    Value color:
+                </span>
+                <input
+                    type="color"
+                    id="valueColor"
+                >
+            </div>
+            <div class="group">
+                <span>
+                    Initially expanded layers:
+                </span>
+                <input
+                    type="number"
+                    id="initialDepth"
+                    name="color"
+                >
+            </div>
+
+            <button type="submit">Save</button>
+        </form>
+
+        <script src="settings.js"></script>
+    </body>
+</html>

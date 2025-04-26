@@ -1,0 +1,26 @@
+{
+    "name": "inertia-devtools",
+    "version": "1.0.0",
+    "author": "",
+    "module": "content.js",
+    "description": "A simple devtool to inspect inertia page data",
+    "license": "ISC",
+    "scripts": {
+        "lint": "eslint . --fix"
+    },
+    "type": "module",
+    "dependencies": {
+        "@html-eslint/eslint-plugin": "^0.39.0",
+        "@html-eslint/parser": "^0.39.0",
+        "eslint-plugin-compat": "^6.0.2"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.25.0",
+        "@types/bun": "latest",
+        "eslint": "^8.57.1 || ^9.0.0",
+        "globals": "^16.0.0"
+    },
+    "peerDependencies": {
+        "typescript": "^5"
+    }
+}
