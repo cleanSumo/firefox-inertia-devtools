@@ -4,6 +4,8 @@
     "version": "1.0.6",
     "description": "Adds devtools to inspect inertia.js data",
     "author": "Johannes Arvidsson",
+    "homepage_url": "https://github.com/cleanSumo/firefox-inertia-devtools",
+    "license": "MIT",
     "icons": {
         "48": "icons/inertia.svg"
     },
