@@ -1,0 +1,11 @@
+release.sh
+.github/
+.gitignore
+node_modules/
+web-ext-artifacts/
+final-artifacts/
+README.md
+*.log
+*.md
+*.zip
+*.tar.gz
