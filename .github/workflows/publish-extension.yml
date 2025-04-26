@@ -35,7 +35,8 @@ jobs:
           --api-secret="${{ secrets.FIREFOX_JWT_SECRET }}" \
           --artifacts-dir ./web-ext-artifacts \
           --channel=listed \
-          --source-dir .
+          --source-dir . \
+          --license="MIT"
 
     - name: Extract version from manifest
       id: get_version
