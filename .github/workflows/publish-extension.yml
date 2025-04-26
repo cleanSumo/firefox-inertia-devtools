@@ -34,7 +34,7 @@ jobs:
           --api-key="${{ secrets.FIREFOX_JWT_ISSUER }}" \
           --api-secret="${{ secrets.FIREFOX_JWT_SECRET }}" \
           --artifacts-dir ./web-ext-artifacts \
-          --channel=unlisted \
+          --channel=listed \
           --source-dir .
 
     - name: Extract version from manifest
