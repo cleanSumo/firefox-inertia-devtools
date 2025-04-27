@@ -1,10 +1,11 @@
 {
+    "summary": {
+        "en-US": "A simple devtools panel to inspect Inertia.js data"
+    },
+    "categories": [
+        "web-development"
+    ],
     "version": {
         "license": "MIT"
-    },
-    "categories": {
-        "firefox": [
-            "developer_tools"
-        ]
     }
 }
