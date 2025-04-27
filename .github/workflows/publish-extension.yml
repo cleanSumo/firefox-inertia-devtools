@@ -23,9 +23,6 @@ jobs:
     - name: Install web-ext
       run: npm install --global web-ext
 
-    - name: Build extension
-      run: web-ext build --artifacts-dir ./web-ext-artifacts
-
     - name: Sign extension
       run: |
         web-ext sign \
@@ -35,7 +32,6 @@ jobs:
           --source-dir . \
           --artifacts-dir ./signed-artifacts \
           --amo-metadata=./amo-metadata.json
-
 
     - name: Upload signed extension as release asset
       uses: softprops/action-gh-release@v2
