@@ -5,7 +5,7 @@ on:
     types: [created]
 
 permissions:
-  contents: write  
+  contents: write
 
 jobs:
   build-sign-upload:
@@ -15,15 +15,13 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    - name: Install Node.js and jq
+    - name: Install Node.js and web-ext
       uses: actions/setup-node@v4
       with:
         node-version: '20'
 
-    - name: Install web-ext and jq
-      run: |
-        npm install --global web-ext
-        sudo apt-get update && sudo apt-get install -y jq
+    - name: Install web-ext
+      run: npm install --global web-ext
 
     - name: Build extension
       run: web-ext build --artifacts-dir ./web-ext-artifacts
@@ -33,25 +31,14 @@ jobs:
         web-ext sign \
           --api-key="${{ secrets.FIREFOX_JWT_ISSUER }}" \
           --api-secret="${{ secrets.FIREFOX_JWT_SECRET }}" \
-          --artifacts-dir ./web-ext-artifacts \
           --channel=listed \
-          --source-dir . \
+          --artifacts-dir ./signed-artifacts \
+          --source-dir ./web-ext-artifacts \
           --amo-metadata=./amo-metadata.json
-
-    - name: Extract version from manifest
-      id: get_version
-      run: |
-        VERSION=$(jq -r '.version' manifest.json)
-        echo "VERSION=$VERSION" >> $GITHUB_ENV
-
-    - name: Rename signed extension
-      run: |
-        mkdir -p final-artifacts
-        cp web-ext-artifacts/*.xpi final-artifacts/inertia-devtools-v${{ env.VERSION }}.xpi
 
     - name: Upload signed extension as release asset
       uses: softprops/action-gh-release@v2
       with:
-        files: final-artifacts/*.xpi
+        files: signed-artifacts/*.xpi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
