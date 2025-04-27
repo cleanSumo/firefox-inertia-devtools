@@ -32,9 +32,10 @@ jobs:
           --api-key="${{ secrets.FIREFOX_JWT_ISSUER }}" \
           --api-secret="${{ secrets.FIREFOX_JWT_SECRET }}" \
           --channel=listed \
+          --source-dir . \
           --artifacts-dir ./signed-artifacts \
-          --source-dir ./web-ext-artifacts \
           --amo-metadata=./amo-metadata.json
+
 
     - name: Upload signed extension as release asset
       uses: softprops/action-gh-release@v2
