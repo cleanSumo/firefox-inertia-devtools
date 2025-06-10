@@ -47,7 +47,7 @@ port.onMessage.addListener((message) => {
         }
 
         oldData = message.payload
-        inertiaData = JSON.parse(message.payload).props
+        inertiaData = JSON.parse(message.payload)
 
         render()
     }
