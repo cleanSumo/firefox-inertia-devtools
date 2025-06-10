@@ -5,7 +5,6 @@
     "description": "Adds devtools to inspect inertia.js data",
     "author": "Johannes Arvidsson",
     "homepage_url": "https://github.com/cleanSumo/firefox-inertia-devtools",
-    "license": "MIT",
     "icons": {
         "48": "icons/inertia.svg"
     },
@@ -26,17 +25,6 @@
             "background_scripts/background.js"
         ]
     },
-    "content_scripts": [
-        {
-            "matches": [
-                "<all_urls>"
-            ],
-            "js": [
-                "content.js"
-            ],
-            "run_at": "document_end"
-        }
-    ],
     "devtools_page": "devtools/devtools-page.html",
     "options_ui": {
         "page": "settings/settings.html"
