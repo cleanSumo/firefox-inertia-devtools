@@ -1,7 +1,7 @@
 {
     "manifest_version": 2,
     "name": "Inertia devtools 🕵️‍♂️",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "description": "Adds devtools to inspect inertia.js data",
     "author": "Johannes Arvidsson",
     "homepage_url": "https://github.com/cleanSumo/firefox-inertia-devtools",
