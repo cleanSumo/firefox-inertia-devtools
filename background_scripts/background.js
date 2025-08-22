@@ -48,21 +48,23 @@ browser.webRequest.onBeforeSendHeaders.addListener(
         const isMainFrame = details.type === 'main_frame'
         const isInertia = details.requestHeaders.find(
             h => h.name.toLowerCase() === 'x-inertia',
-        )?.value === 'true'        
-  
+        )?.value === 'true'
+
+        if( !(isMainFrame || isInertia)) {
+            return 
+        }
+
         filter.ondata = (event) => {
             data += decoder.decode(event.data, { stream: true })
             filter.write(event.data) // Continue passing data to the browser
         }
-  
+        
         filter.onstop = (event) => {
-            if( isMainFrame ) {
-                inertiaData = readMainFrame(data)
-            }
-            else if(isInertia) {
-                inertiaData = readPartial(data)
-            }
+            inertiaData = isMainFrame
+                ? readMainFrame(data)
+                : readPartial(data)
 
+            
             if(inertiaData) {
                 sendDataToPanel()
             } else {
@@ -71,8 +73,6 @@ browser.webRequest.onBeforeSendHeaders.addListener(
 
             filter.disconnect()
         }
-  
-        return {}
     },
     { 
         urls: ['<all_urls>'],
@@ -84,7 +84,7 @@ browser.webRequest.onBeforeSendHeaders.addListener(
 function readPartial(data) {
     console.log('🚀 Reading inertia update')
 
-    return data
+    return Object.assign(inertiaData, data)
 }
 
 function readMainFrame(html) {

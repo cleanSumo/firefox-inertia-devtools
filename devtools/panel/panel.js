@@ -57,7 +57,7 @@ port.onMessage.addListener((message) => {
         oldData = null
         inertiaData = null
 
-        propsContainer.innerText = 'Not an inertia page.'
+        propsContainer.innerText = 'Refresh page to se inertia data.'
     }
 })
 
