@@ -1,4 +1,4 @@
-let inertiaData = null
+// let inertiaData = null
 let port = null
 
 let isNotInertia = false
@@ -18,9 +18,9 @@ browser.runtime.onConnect.addListener(p => {
             return
         }
 
-        if( inertiaData ) {            
-            sendDataToPanel()
-        }
+        // if( inertiaData ) {            
+        //     sendDataToPanel(inertiaData, 'main-frame')
+        // }
 
         port.onDisconnect.addListener(() => {
             port = null
@@ -28,31 +28,36 @@ browser.runtime.onConnect.addListener(p => {
     } 
 })
 
-function sendDataToPanel() {    
+// main-frame
+// partial-reload
+// no-data
+function sendDataToPanel(data, msg) {    
     if(!port) {
         return
     }
 
     port.postMessage({
-        type: 'inertia-props',
-        payload: inertiaData,
+        type: msg,
+        payload: data,
     })
 }
 
 browser.webRequest.onBeforeSendHeaders.addListener(
     function (details) {        
-        const filter = browser.webRequest.filterResponseData(details.requestId)
-        const decoder = new TextDecoder('utf-8')
-        let data = ''
-        
         const isMainFrame = details.type === 'main_frame'
         const isInertia = details.requestHeaders.find(
             h => h.name.toLowerCase() === 'x-inertia',
         )?.value === 'true'
 
+
         if( !(isMainFrame || isInertia)) {
             return 
         }
+
+        const filter = browser.webRequest.filterResponseData(details.requestId)
+        const decoder = new TextDecoder('utf-8')
+        let data = ''
+        
 
         filter.ondata = (event) => {
             data += decoder.decode(event.data, { stream: true })
@@ -60,16 +65,16 @@ browser.webRequest.onBeforeSendHeaders.addListener(
         }
         
         filter.onstop = (event) => {
-            inertiaData = isMainFrame
-                ? readMainFrame(data)
-                : readPartial(data)
-
-            
-            if(inertiaData) {
-                sendDataToPanel()
+            if(isMainFrame) {
+                sendDataToPanel(readMainFrame(data), 'main-frame')
             } else {
-                console.error('No data')
+                
+                sendDataToPanel(readPartial(data), 'partial-reload')
             }
+            
+            // if(!inertiaData) {
+            //     sendDataToPanel(null, 'no-data')
+            // }
 
             filter.disconnect()
         }
@@ -82,27 +87,25 @@ browser.webRequest.onBeforeSendHeaders.addListener(
 )
 
 function readPartial(data) {
-    console.log('🚀 Reading inertia update')
+    console.log('🚀 Reading partial update')
 
-    return Object.assign(inertiaData, data)
+    return data
 }
 
 function readMainFrame(html) {
-    console.log('🚀 Reading main frame')
+    // console.log('🚀 Reading main frame')
     
     // Look for the Inertia page data in the HTML
     const match = html.match(/<div[^>]+id="app"[^>]+data-page="([^"]+)"/)
     
     if (match) {
-        const data = match[1]
-            .replace(/&quot;/g, '"')
-            .replace(/&amp;/g, '&')
-            .replace(/&#39;/g, '\'')
-            .replace(/&lt;/g, '<')
-            .replace(/&gt;/g, '>')
-        
         try {
-            return data
+            return match[1]
+                .replace(/&quot;/g, '"')
+                .replace(/&amp;/g, '&')
+                .replace(/&#39;/g, '\'')
+                .replace(/&lt;/g, '<')
+                .replace(/&gt;/g, '>')
         } catch (error) {
             console.error('Failed to parse Inertia page data:', error)
         }

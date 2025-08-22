@@ -35,30 +35,51 @@ function onSettingsReceived(settings) {
 
 browser.storage.sync.get().then(onSettingsReceived, console.error)
 
+const mainFrame = (payload) => {
+    if(payload === oldData) {
+        console.log('Identical, no render')
+
+        return
+    }
+
+    oldData = payload
+    inertiaData = JSON.parse(payload)
+
+    render()
+}
+const partialReload = (payload) => {
+    let temp = structuredClone(inertiaData)
+
+    try {
+        temp.props = Object.assign(temp.props, JSON.parse(payload).props)
+        inertiaData = temp
+        
+    } catch (error) {
+        console.error(error)
+    }
+
+    render()
+}
+const noData = (message) => {
+    console.log('panel received "no-data"')
+        
+    oldData = null
+    inertiaData = null
+
+    propsContainer.innerText = 'Refresh page to se inertia data.'
+}
+
+const parsers = {
+    'main-frame': mainFrame,
+    'partial-reload': partialReload,
+    'no-data': noData,
+}
 
 // add listener for inertia props
 port.onMessage.addListener((message) => {
-    if(message.type === 'inertia-props') {
-
-        if(message.payload === oldData) {
-            console.log('Identical, no render')
-
-            return
-        }
-
-        oldData = message.payload
-        inertiaData = JSON.parse(message.payload)
-
-        render()
-    }
-    else if(message.type === 'no-data') {    
-        console.log('panel received "no-data"')
-            
-        oldData = null
-        inertiaData = null
-
-        propsContainer.innerText = 'Refresh page to se inertia data.'
-    }
+    console.log('panel got', message.type);
+    
+    (parsers[message.type] ?? (() => {console.error('unknown action')}))(message.payload)
 })
 
 function render() {    
