@@ -21,31 +21,9 @@ const model = (identifier) => {
 }
 const settings = [
     {
-        key: 'backgroundColor',
-        model: model('#backgroundColor'),
-        default: '#444444',
-        get value() {
-            return this.model.value
-        },
-        set value(val) {
-            this.model.value = val
-        },
-    },
-    {
-        key: 'keyColor',
-        model: model('#keyColor'),
-        default: '#32CD32',
-        get value() {
-            return this.model.value
-        },
-        set value(val) {
-            this.model.value = val
-        },
-    },
-    {
-        key: 'valueColor',
-        model: model('#valueColor'),
-        default: '#FFD700',
+        key: 'theme',
+        model: model('#theme'),
+        default: 'dark',
         get value() {
             return this.model.value
         },

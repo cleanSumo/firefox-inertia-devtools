@@ -12,17 +12,15 @@ function onSettingsReceived(settings) {
     if(!settings ) {
         return
     }
-
-    if(settings.backgroundColor) {
-        document.documentElement.style.setProperty('--backgroundColor', settings.backgroundColor)
-    }
     
-    if(settings.keyColor) {
-        document.documentElement.style.setProperty('--keyColor', settings.keyColor)
-    }
-
-    if(settings.valueColor) {
-        document.documentElement.style.setProperty('--valueColor', settings.valueColor)
+    if(settings.theme) {
+        if(settings.theme === 'light'){
+            document.documentElement.classList.add('light')
+        }
+        
+        if(settings.theme === 'dark'){
+            document.documentElement.classList.remove('light')
+        }
     }
 
     if(settings.initialDepth) {
@@ -61,8 +59,6 @@ const partialReload = (payload) => {
     render()
 }
 const noData = (message) => {
-    console.log('panel received "no-data"')
-        
     oldData = null
     inertiaData = null
 
