@@ -1,7 +1,6 @@
 const propsContainer = document.getElementById('props-container')
 const port = browser.runtime.connect({ name: 'panel-connector' })
 
-let oldData = null
 let inertiaData = null
 
 let settingsLoaded = false
@@ -34,13 +33,6 @@ function onSettingsReceived(settings) {
 browser.storage.sync.get().then(onSettingsReceived, console.error)
 
 const mainFrame = (payload) => {
-    if(payload === oldData) {
-        console.log('Identical, no render')
-
-        return
-    }
-
-    oldData = payload
     inertiaData = JSON.parse(payload)
 
     render()
@@ -59,16 +51,21 @@ const partialReload = (payload) => {
     render()
 }
 const noData = (message) => {
-    oldData = null
     inertiaData = null
 
     propsContainer.innerText = 'Refresh page to se inertia data.'
+}
+const notInertia = (message) => {
+    inertiaData = null
+
+    propsContainer.innerText = 'Possibly not an Inerta page.'
 }
 
 const parsers = {
     'main-frame': mainFrame,
     'partial-reload': partialReload,
     'no-data': noData,
+    'not-inertia': notInertia,
 }
 
 // add listener for inertia props

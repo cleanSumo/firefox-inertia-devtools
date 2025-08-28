@@ -1,4 +1,3 @@
-// let inertiaData = null
 let port = null
 
 let isNotInertia = false
@@ -12,15 +11,11 @@ browser.runtime.onConnect.addListener(p => {
         
         if(isNotInertia) {            
             port.postMessage({
-                type: 'no-data',
+                type: 'not-inertia',
             })
 
             return
         }
-
-        // if( inertiaData ) {            
-        //     sendDataToPanel(inertiaData, 'main-frame')
-        // }
 
         port.onDisconnect.addListener(() => {
             port = null
@@ -31,15 +26,21 @@ browser.runtime.onConnect.addListener(p => {
 // main-frame
 // partial-reload
 // no-data
+// not-inertia
 function sendDataToPanel(data, msg) {    
-    if(!port) {
+    if(port === null) {
         return
     }
 
-    port.postMessage({
-        type: msg,
-        payload: data,
-    })
+    try {
+        port.postMessage({
+            type: msg,
+            payload: data,
+        })
+    } catch (error) {
+        console.warn('Port is dead', error)
+        port = null
+    }
 }
 
 function listener(details) {
